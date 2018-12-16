@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style type ="text/javascript">
+                    #my_canvas{
+                        padding-left: 0;
+                        padding-right: 0;
+                        margin-left: auto;
+                        margin-right: auto;
+                        display: block;
+                        width: 660px;
+                        
+                    }
+                
+                </style>
+                <script>
+                    var ctx; //defines the ctx variable for drawing on the canvas
+                    var WIDTH; //variable for the width of the canvas
+                    var HEIGHT; //variable for the height of the canvas
+                    
+                    var date;
+                    var hour;
+                    var min;
+                    var sec;
+                    
+                    var sHour;
+                    var sMin;
+                    var sSec;
+                    
+                    var timeText;
+                    
+                    var playing;
+                    var midnight;
+                    var bHour;
+                    var bMin;
+                    var bSec;
+                    
+                    var img = new Image();
+                    
+                    
+                    function init() { //function to run once the window is loaded
+                        ctx = document.getElementById('my_canvas').getContext('2d');
+                        WIDTH = ctx.canvas.width; //set the WIDTH = to the width of the canvas
+                        HEIGHT = ctx.canvas.height; //set the HEIGHT = to the height of the canvas
+                        playing = false;
+                        midnight = false;
+                        bHour = false;
+                        bMin = false;
+                        bSec = false;
+                        
+                        hour = 0;
+                        min = 0;
+                        sec = 0;
+                        
+                        sHour = "";
+                        sMin = "";
+                        sSec = "";
+                        
+                        img.src = 'sheck.jpg';
+                        draw(); //start the draw function
+                    }
+                
+                function drawSheck() {
+                    ctx.fillStyle = "#000000";
+                    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+                    ctx.drawImage(img, 10 , 10, 640, 360);
+                    
+                }
+                
+                function clear() { //clear screen function with a passed variable for colour
+                    ctx.fillStyle = "#FF0000"; //fills with the passed colour
+                    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+                }
+                
+                function updateTime() {
+                    date = new Date(); // for now
+                    hour = date.getHours();
+                    min = date.getMinutes();
+                    sec = date.getSeconds();
+
+                    sSec = "" + sec;
+                    sMin = "" + min;
+                    sHour = "" + hour;
+                    if (sec < 10) {
+                        sSec = "0" + sSec;
+                    }
+                    if (min < 10) {
+                        sMin = "0" + sMin;
+                    }
+                    if (hour < 10) {
+                        sHour = "0" + sHour;
+                    }
+                    
+                    timeText = sHour + ":" + sMin + ":" + sSec;
+                    updateTimeText();
+                }
+                
+                function updateTimeText() {
+                    ctx.font = "55px Helvetica";
+                    ctx.fillStyle = "black";
+                    ctx.textAlign = "left";
+                    ctx.fillText(timeText, 28, 210); //fill the text
+                }
+                
+                function updateCountDown() {
+                    var time = 3600*hour + 60*min + sec;
+                    var timeTo = 24 * 3600 - time;
+                    hour = Math.floor(timeTo / 3600);
+                    timeTo -= hour * 3600;
+                    min = Math.floor(timeTo / 60);
+                    timeTo -= min * 60;
+                    sec = Math.floor(timeTo);
+                    sSec = "" + sec;
+                    sMin = "" + min;
+                    sHour = "" + hour;
+                    
+                    if (sec == 0 && min == 0 && hour == 24) {
+                        midnight = true;
+                    }
+                    
+                    if (!midnight) {
+                        ctx.fillStyle = "#d30000";
+                        if (sec < 10) {
+                            sSec = "0" + sSec;
+                        }
+                        if (min < 10) {
+                            sMin = "0" + sMin;
+                        }
+                        if (hour < 10) {
+                            sHour = "0" + sHour;
+                        }
+                    } else {
+                        ctx.fillStyle = "#d39696";
+                        sHour = "00";
+                        sMin = "00";
+                        sSec = "00";
+                    }
+                    countdown = sHour + ":" + sMin + ":" + sSec;
+                    
+                    if (hour == 0) {
+                        bHour = true;
+                    }
+                    if (bHour && min <= 1) {
+                        bMin = true;
+                    }
+                    if (bHour && bMin && sec <= 42) {
+                        bSec = true;
+                    }
+                    if (!playing && bHour && bMin && bSec) {
+                        var jump = 102700000 - (min * 6*10000000 + sec * 1000000);
+                        //
+                        //
+                        //s.playMoBamba(jump);
+                        //
+                        //
+                        playing = true;
+                    }
+                    
+                    ctx.fillText(countdown, 95, 270); //fill the text
+                }
+                
+                function draw() { //keep looping
+                    drawSheck();
+                    updateTime();
+                    updateCountDown();
+                    window.requestAnimationFrame(draw); //loop the draw function again
+                }
+                
+                window.onload = init; //when the window finishes loading, activate the init function
+                    </script>
+                </head>
+    <body style="background-color:#fffe65;">
+        <div align="center"><canvas id="my_canvas" width="660" height="380" ></canvas></div> <!---canvas that is 800px wide and 600px tall--->
+        
+    </body>
+</html>
