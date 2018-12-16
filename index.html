@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
     <head>
         <title></title>
@@ -12,11 +11,15 @@
                         margin-left: auto;
                         margin-right: auto;
                         display: block;
-                        width: 660px;
-                        
+                        width: 680px;
                     }
-                
                 </style>
+                <iframe src="silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+                <audio id="audio2"
+                    src="mobamba.wav"
+                    type="audio/wav">
+                    <p>Your browser does not support the audio element</p>
+                </audio>
                 <script>
                     var ctx; //defines the ctx variable for drawing on the canvas
                     var WIDTH; //variable for the width of the canvas
@@ -26,6 +29,7 @@
                     var hour;
                     var min;
                     var sec;
+                    var millis;
                     
                     var sHour;
                     var sMin;
@@ -37,9 +41,10 @@
                     var midnight;
                     var bHour;
                     var bMin;
-                    var bSec;
                     
                     var img = new Image();
+                    var myAudio = document.getElementById('audio2');
+                    var context;
                     
                     
                     function init() { //function to run once the window is loaded
@@ -50,80 +55,34 @@
                         midnight = false;
                         bHour = false;
                         bMin = false;
-                        bSec = false;
-                        
                         hour = 0;
                         min = 0;
                         sec = 0;
-                        
+                        millis = 0;
                         sHour = "";
                         sMin = "";
                         sSec = "";
-                        
+                        content = new AudioContext();
                         img.src = 'sheck.jpg';
                         draw(); //start the draw function
                     }
                 
-                function drawSheck() {
-                    ctx.fillStyle = "#000000";
-                    ctx.fillRect(0, 0, WIDTH, HEIGHT);
-                    ctx.drawImage(img, 10 , 10, 640, 360);
-                    
-                }
-                
-                function clear() { //clear screen function with a passed variable for colour
-                    ctx.fillStyle = "#FF0000"; //fills with the passed colour
-                    ctx.fillRect(0, 0, WIDTH, HEIGHT);
-                }
-                
-                function updateTime() {
-                    date = new Date(); // for now
-                    hour = date.getHours();
-                    min = date.getMinutes();
-                    sec = date.getSeconds();
-
-                    sSec = "" + sec;
-                    sMin = "" + min;
-                    sHour = "" + hour;
-                    if (sec < 10) {
-                        sSec = "0" + sSec;
+                    function drawSheck() {
+                        ctx.fillStyle = "#000000";
+                        ctx.fillRect(10, 0, WIDTH-20, HEIGHT);
+                        ctx.drawImage(img, 20 , 10, 640, 360);
                     }
-                    if (min < 10) {
-                        sMin = "0" + sMin;
-                    }
-                    if (hour < 10) {
-                        sHour = "0" + sHour;
-                    }
-                    
-                    timeText = sHour + ":" + sMin + ":" + sSec;
-                    updateTimeText();
-                }
                 
-                function updateTimeText() {
-                    ctx.font = "55px Helvetica";
-                    ctx.fillStyle = "black";
-                    ctx.textAlign = "left";
-                    ctx.fillText(timeText, 28, 210); //fill the text
-                }
-                
-                function updateCountDown() {
-                    var time = 3600*hour + 60*min + sec;
-                    var timeTo = 24 * 3600 - time;
-                    hour = Math.floor(timeTo / 3600);
-                    timeTo -= hour * 3600;
-                    min = Math.floor(timeTo / 60);
-                    timeTo -= min * 60;
-                    sec = Math.floor(timeTo);
-                    sSec = "" + sec;
-                    sMin = "" + min;
-                    sHour = "" + hour;
+                    function updateTime() {
+                        date = new Date(); // for now
+                        hour = 23; //date.getHours();
+                        min = 59; //date.getMinutes();
+                        sec = date.getSeconds();
+                        millis = date.getMilliseconds();
                     
-                    if (sec == 0 && min == 0 && hour == 24) {
-                        midnight = true;
-                    }
-                    
-                    if (!midnight) {
-                        ctx.fillStyle = "#d30000";
+                        sSec = "" + sec;
+                        sMin = "" + min;
+                        sHour = "" + hour;
                         if (sec < 10) {
                             sSec = "0" + sSec;
                         }
@@ -133,48 +92,81 @@
                         if (hour < 10) {
                             sHour = "0" + sHour;
                         }
-                    } else {
-                        ctx.fillStyle = "#d39696";
-                        sHour = "00";
-                        sMin = "00";
-                        sSec = "00";
-                    }
-                    countdown = sHour + ":" + sMin + ":" + sSec;
                     
-                    if (hour == 0) {
-                        bHour = true;
+                        timeText = sHour + ":" + sMin + ":" + sSec;
+                        updateTimeText();
                     }
-                    if (bHour && min <= 1) {
-                        bMin = true;
+                
+                    function updateTimeText() {
+                        ctx.font = "55px Helvetica";
+                        ctx.fillStyle = "black";
+                        ctx.textAlign = "left";
+                        ctx.fillText(timeText, 38, 210); //fill the text
                     }
-                    if (bHour && bMin && sec <= 42) {
-                        bSec = true;
-                    }
-                    if (!playing && bHour && bMin && bSec) {
-                        var jump = 102700000 - (min * 6*10000000 + sec * 1000000);
-                        //
-                        //
-                        //s.playMoBamba(jump);
-                        //
-                        //
-                        playing = true;
-                    }
+                
+                    function updateCountDown() {
+                        var time = 3600 * hour + 60 * min + sec;
+                        var timeTo = 24 * 3600 - time;
+                        hour = Math.floor(timeTo / 3600);
+                        timeTo -= hour * 3600;
+                        min = Math.floor(timeTo / 60);
+                        timeTo -= min * 60;
+                        sec = Math.floor(timeTo);
+                        sSec = "" + sec;
+                        sMin = "" + min;
+                        sHour = "" + hour;
                     
-                    ctx.fillText(countdown, 95, 270); //fill the text
-                }
+                        if (sec == 0 && min == 0 && hour == 24) {
+                            midnight = true;
+                        }
+                    
+                        if (!midnight) {
+                            ctx.fillStyle = "#d30000";
+                            if (sec < 10) {
+                                sSec = "0" + sSec;
+                            }
+                            if (min < 10) {
+                                sMin = "0" + sMin;
+                            }
+                            if (hour < 10) {
+                                sHour = "0" + sHour;
+                            }
+                        } else {
+                            ctx.fillStyle = "#d39696";
+                            sHour = "00";
+                            sMin = "00";
+                            sSec = "00";
+                        }
+                        countdown = sHour + ":" + sMin + ":" + sSec;
+                    
+                        if (hour == 0) {
+                            bHour = true;
+                        }
+                        if (bHour && (min < 1 || (min == 1 && sec <= 42 && millis >= 500))) {
+                            bMin = true;
+                        }
+                        if (!playing && bHour && bMin) {
+                            var jump = 102.4 - (min * 60 + sec) + millis*0.001;
+                            myAudio.currentTime = jump;
+                            myAudio.play();
+                            playing = true;
+                        }
+                        ctx.fillText(countdown, 105, 270); //fill the text
+                    }
                 
-                function draw() { //keep looping
-                    drawSheck();
-                    updateTime();
-                    updateCountDown();
-                    window.requestAnimationFrame(draw); //loop the draw function again
-                }
+                    function draw() { //keep looping
+                        drawSheck();
+                        updateTime();
+                        updateCountDown();
+                        window.requestAnimationFrame(draw); //loop the draw function again
+                    }
                 
-                window.onload = init; //when the window finishes loading, activate the init function
-                    </script>
-                </head>
+                    window.onload = init;
+                </script>
+    </head>
     <body style="background-color:#fffe65;">
-        <div align="center"><canvas id="my_canvas" width="660" height="380" ></canvas></div> <!---canvas that is 800px wide and 600px tall--->
-        
+        <div align="center">
+            <canvas id="my_canvas" width="680" height="380" ></canvas>
+        </div>
     </body>
 </html>
