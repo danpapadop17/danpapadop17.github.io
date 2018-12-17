@@ -19,10 +19,10 @@
                     left: 50%;
                 }
                 </style>
-                <audio id="audio2" src="mobamba.mp3" type="audio/mp3">
+                <audio id="audio2" src="MoBambaSilence.mp3" type="audio/mp3">
                     <p>Your browser does not support the audio element</p>
                 </audio>
-                <input type="button" value="PLAY" onclick="buttonClicked()"></input>
+                <input type="button" value="START THE COUNTDOWN" onclick="buttonClicked()"></input>
                 <script>
                     var ctx; //defines the ctx variable for drawing on the canvas
                     var WIDTH; //variable for the width of the canvas
@@ -70,16 +70,14 @@
                         img.src = 'sheck.jpg';
                         
                         //document.getElementById("button").addEventListener("click", buttonClicked);
-                        waitTimer = 300;
+                        waitTimer = 0;
                         
                         draw(); //start the draw function
                     }
                 
                     function buttonClicked() {
                         stage = 1;
-                        console.log("Yeet");
                         myAudio.play();
-
                     }
                 
                     function drawSheck() {
@@ -90,8 +88,8 @@
                 
                     function updateTime() {
                         date = new Date(); // for now
-                        hour = date.getHours();
-                        min = date.getMinutes();
+                        hour = 23;//date.getHours();
+                        min = 58;//date.getMinutes();
                         sec = date.getSeconds();
                         millis = date.getMilliseconds();
                     
@@ -161,15 +159,14 @@
                             bMin = true;
                         }
                         if (!playing && bHour && bMin) {
-                            var jump = 102.4 - (min * 60 + sec) + millis*0.001;
+                            var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
                             myAudio.currentTime = jump;
-                            myAudio.play();
                             playing = true;
-                        } else {
-                            if (waitTimer > 0) {
-                                waitTimer--;
+                        } else if (!playing) {
+                            if (waitTimer < 550) {
+                                waitTimer++;
                             } else {
-                                waitTimer = 300;
+                                waitTimer = 0;
                                 myAudio.currentTime = 0;
                             }
                         }
