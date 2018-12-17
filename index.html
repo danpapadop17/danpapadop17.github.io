@@ -22,7 +22,7 @@
                 <audio id="audio2" src="mobamba.mp3" type="audio/mp3">
                     <p>Your browser does not support the audio element</p>
                 </audio>
-                <button id="button">Click me</button>
+                <input type="button" value="PLAY" onclick="buttonClicked()"></input>
                 <script>
                     var ctx; //defines the ctx variable for drawing on the canvas
                     var WIDTH; //variable for the width of the canvas
@@ -49,7 +49,6 @@
                     
                     var img = new Image();
                     var myAudio = document.getElementById('audio2');
-                    var context;
                     
                     function init() { //function to run once the window is loaded
                         ctx = document.getElementById('my_canvas').getContext('2d');
@@ -68,10 +67,9 @@
                         sHour = "";
                         sMin = "";
                         sSec = "";
-                        content = new AudioContext();
                         img.src = 'sheck.jpg';
                         
-                        document.getElementById("button").addEventListener("click", buttonClicked);
+                        //document.getElementById("button").addEventListener("click", buttonClicked);
                         waitTimer = 300;
                         
                         draw(); //start the draw function
