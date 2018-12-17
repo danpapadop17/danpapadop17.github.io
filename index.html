@@ -75,8 +75,8 @@
                 
                     function updateTime() {
                         date = new Date(); // for now
-                        hour = 23; //date.getHours();
-                        min = 59; //date.getMinutes();
+                        hour = date.getHours();
+                        min = date.getMinutes();
                         sec = date.getSeconds();
                         millis = date.getMilliseconds();
                     
