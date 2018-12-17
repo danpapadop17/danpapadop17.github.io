@@ -13,23 +13,28 @@
                         display: block;
                         width: 680px;
                     }
+                #myBtn {
+                    position:absolute;
+                    top: 50%;
+                    left: 50%;
+                }
                 </style>
-                <iframe src="silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
-                <audio id="audio2"
-                    src="mobamba.mp3"
-                    type="audio/mp3">
+                <audio id="audio2" src="mobamba.mp3" type="audio/mp3">
                     <p>Your browser does not support the audio element</p>
                 </audio>
+                <button id="button">Click me</button>
                 <script>
                     var ctx; //defines the ctx variable for drawing on the canvas
                     var WIDTH; //variable for the width of the canvas
                     var HEIGHT; //variable for the height of the canvas
+                    var stage;
                     
                     var date;
                     var hour;
                     var min;
                     var sec;
                     var millis;
+                    var waitTimer;
                     
                     var sHour;
                     var sMin;
@@ -46,11 +51,12 @@
                     var myAudio = document.getElementById('audio2');
                     var context;
                     
-                    
                     function init() { //function to run once the window is loaded
                         ctx = document.getElementById('my_canvas').getContext('2d');
                         WIDTH = ctx.canvas.width; //set the WIDTH = to the width of the canvas
                         HEIGHT = ctx.canvas.height; //set the HEIGHT = to the height of the canvas
+                        stage = 0;
+                        
                         playing = false;
                         midnight = false;
                         bHour = false;
@@ -64,7 +70,18 @@
                         sSec = "";
                         content = new AudioContext();
                         img.src = 'sheck.jpg';
+                        
+                        document.getElementById("button").addEventListener("click", buttonClicked);
+                        waitTimer = 300;
+                        
                         draw(); //start the draw function
+                    }
+                
+                    function buttonClicked() {
+                        stage = 1;
+                        console.log("Yeet");
+                        myAudio.play();
+
                     }
                 
                     function drawSheck() {
@@ -150,14 +167,27 @@
                             myAudio.currentTime = jump;
                             myAudio.play();
                             playing = true;
+                        } else {
+                            if (waitTimer > 0) {
+                                waitTimer--;
+                            } else {
+                                waitTimer = 300;
+                                myAudio.currentTime = 0;
+                            }
                         }
                         ctx.fillText(countdown, 105, 270); //fill the text
                     }
                 
+                
                     function draw() { //keep looping
-                        drawSheck();
-                        updateTime();
-                        updateCountDown();
+                        if (stage == 0) {
+                            
+                        } else {
+                            drawSheck();
+                            updateTime();
+                            updateCountDown();
+                        }
+                        
                         window.requestAnimationFrame(draw); //loop the draw function again
                     }
                 
@@ -166,7 +196,9 @@
     </head>
     <body style="background-color:#fffe65;">
         <div align="center">
-            <canvas id="my_canvas" width="680" height="380" ></canvas>
+            <canvas id="my_canvas" width="680" height="380" style="z-index:1">
+                <input type="button" id="myBtn" style="z-index:2" value="test"/>
+            </canvas>
         </div>
     </body>
 </html>
