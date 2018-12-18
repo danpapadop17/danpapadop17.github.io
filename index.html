@@ -98,7 +98,7 @@
                 function updateTime() {
                     date = new Date(); // for now
                     hour = 23;//date.getHours();
-                    min = 59;//date.getMinutes();
+                    min = 58;//date.getMinutes();
                     sec = date.getSeconds();
                     millis = date.getMilliseconds();
                     
@@ -168,15 +168,12 @@
                         bMin = true;
                     }
                     startPlaying();
-                    ctx.fillText(countdown, 105, 270); //fill the text
-                    ctx.fillText(inOtherTab, 100, 500);
-                    ctx.fillText(waitTimer, 100, 550);
-                    ctx.fillText(playing, 100, 600);
+                    ctx.fillText(countdown, 105, 270);
                     
                 }
                 
                 function startPlaying() {
-                    if (updateTimeTimer > 30 && !updatedTheTimer) {
+                    if (updateTimeTimer > 5 && !updatedTheTimer) {
                         var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
                         myAudio.currentTime = jump;
                         myAudio.play();
