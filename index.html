@@ -37,7 +37,6 @@
                     
                     var timeText;
                     var inOtherTab;
-                    var jumpingBack;
                     
                     var playing;
                     var midnight;
@@ -69,7 +68,6 @@
                         loadingImg.src = 'LoadingPage.jpg';
                         waitTimer = 0;
                         inOtherTab = false;
-                        jumpingBack = false;
                         
                         draw(); //start the draw function
                     }
@@ -77,7 +75,7 @@
                 function buttonClicked() {
                     if (stage == 0) {
                         stage = 1;
-                        myAudio.play();
+                        startPlaying();
                     }
                 }
                 
@@ -165,12 +163,15 @@
                     if (bHour && (min < 1 || (min == 1 && sec <= 42 && millis >= 500))) {
                         bMin = true;
                     }
+                    startPlaying();
+                    ctx.fillText(countdown, 105, 270); //fill the text
+                }
+                
+                function startPlaying() {
                     if (!playing && bHour && bMin) {
                         var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
                         myAudio.currentTime = jump;
-                        if (jumpingBack) {
-                            myAudio.play();
-                        }
+                        myAudio.play();
                         playing = true;
                     } else if (!playing) {
                         if (waitTimer < 400) {
@@ -180,7 +181,6 @@
                             myAudio.currentTime = 0;
                         }
                     }
-                    ctx.fillText(countdown, 105, 270); //fill the text
                 }
                 
                 document.addEventListener('visibilitychange', otherTab, false);
@@ -189,7 +189,6 @@
                         inOtherTab = true;
                         myAudio.pause();
                         playing = false;
-                        jumpingBack = true;
                     } else {
                         inOtherTab = false;
                     }
