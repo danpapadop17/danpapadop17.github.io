@@ -30,6 +30,8 @@
                     var sec;
                     var millis;
                     var waitTimer;
+                    var updateTimeTimer;
+                    var updatedTheTimer;
                     
                     var sHour;
                     var sMin;
@@ -68,6 +70,8 @@
                         loadingImg.src = 'LoadingPage.jpg';
                         waitTimer = 0;
                         inOtherTab = false;
+                        updateTimeTimer = 0;
+                        updatedTheTimer = false;
                         
                         draw(); //start the draw function
                     }
@@ -172,6 +176,15 @@
                 }
                 
                 function startPlaying() {
+                    if (updateTimeTimer > 30 && !updatedTheTimer) {
+                        var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
+                        myAudio.currentTime = jump;
+                        myAudio.play();
+                        console.log("here");
+                        updatedTheTimer = true;
+                    } else {
+                        updateTimeTimer++;
+                    }
                     if (!playing && bHour && bMin) {
                         var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
                         myAudio.currentTime = jump;
