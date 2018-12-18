@@ -75,7 +75,19 @@
                 function buttonClicked() {
                     if (stage == 0) {
                         stage = 1;
-                        startPlaying();
+                        if (!playing && bHour && bMin) {
+                            var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
+                            myAudio.currentTime = jump;
+                            myAudio.play();
+                            playing = true;
+                        } else if (!playing) {
+                            if (waitTimer < 400) {
+                                waitTimer++;
+                            } else {
+                                waitTimer = 0;
+                                myAudio.currentTime = 0;
+                            }
+                        }
                     }
                 }
                 
@@ -170,8 +182,8 @@
                 function startPlaying() {
                     if (!playing && bHour && bMin) {
                         var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
-                        myAudio.play();
                         myAudio.currentTime = jump;
+                        myAudio.play();
                         playing = true;
                     } else if (!playing) {
                         if (waitTimer < 400) {
