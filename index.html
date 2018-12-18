@@ -79,9 +79,7 @@
                 function buttonClicked() {
                     if (stage == 0) {
                         stage = 1;
-                        if (!playing && bHour && bMin) {
-                            myAudio.play();
-                        }
+                        myAudio.play();
                     }
                 }
                 
@@ -175,7 +173,7 @@
                 }
                 
                 function startPlaying() {
-                    if (updateTimeTimer > 5 && !updatedTheTimer) {
+                    if (updateTimeTimer > 5 && !updatedTheTimer && playing) {
                         var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
                         myAudio.currentTime = jump;
                         myAudio.play();
