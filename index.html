@@ -79,7 +79,9 @@
                 function buttonClicked() {
                     if (stage == 0) {
                         stage = 1;
-                        myAudio.play();
+                        if (!playing && bHour && bMin) {
+                            myAudio.play();
+                        }
                     }
                 }
                 
