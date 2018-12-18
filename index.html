@@ -37,6 +37,7 @@
                     
                     var timeText;
                     var inOtherTab;
+                    var jumpingBack;
                     
                     var playing;
                     var midnight;
@@ -68,6 +69,7 @@
                         loadingImg.src = 'LoadingPage.jpg';
                         waitTimer = 0;
                         inOtherTab = false;
+                        jumpingBack = false;
                         
                         draw(); //start the draw function
                     }
@@ -166,7 +168,9 @@
                     if (!playing && bHour && bMin) {
                         var jump = 102.4 - (min * 60 + sec) + millis*0.001 + 10;
                         myAudio.currentTime = jump;
-                        myAudio.play();
+                        if (jumpingBack) {
+                            myAudio.play();
+                        }
                         playing = true;
                     } else if (!playing) {
                         if (waitTimer < 400) {
@@ -185,6 +189,7 @@
                         inOtherTab = true;
                         myAudio.pause();
                         playing = false;
+                        jumpingBack = true;
                     } else {
                         inOtherTab = false;
                     }
